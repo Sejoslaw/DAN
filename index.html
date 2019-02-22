@@ -1,0 +1,159 @@
+<html>
+
+<head>
+    <title>DAN Exercise</title>
+
+    <style type="text/css">
+        html {
+            background-color: black;
+        }
+        
+        div {
+            color: white;
+        }
+        
+        .zad4 {
+            color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h2>Zad 1:</h2>
+        <div id="zad1"></div>
+        <br>
+        <br>
+        <script>
+            Array.prototype.duplicate = function() {
+                return "[" + this.concat(this) + "]";
+            }
+
+            var element = document.getElementById("zad1");
+            element.innerHTML = [1, 2, 3, 4].duplicate()
+        </script>
+    </div>
+
+    <div>
+        <h2>Zad 2:</h2>
+        <div id="zad2"></div>
+        <br>
+        <br>
+        <script>
+            Array.prototype.removeEvenNumbers = function() {
+                return this.map(val => {
+                    if (val % 2 != 0) {
+                        return val;
+                    }
+                    return null;
+                });
+            }
+
+            var element = document.getElementById("zad2");
+            element.innerHTML = "[" + [1, 2, 3, 4, 5, 6, 7, 8, 9].removeEvenNumbers().toString().split(',,').join(',') + "]";
+        </script>
+    </div>
+
+    <div>
+        <h2>Zad 3:</h2>
+        <div id="zad3"></div>
+        <br>
+        <br>
+        <script>
+            function retrieveData(url, callback) {
+                var request = new XMLHttpRequest();
+
+                request.open("GET", url);
+                request.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        callback(JSON.parse(this.responseText));
+                    }
+                }
+                request.send();
+            }
+
+            var firstUrl = "https://baconipsum.com/api/?type=all-meat&paras=3&start-with-lorem=1&format=json";
+            var secondUrl = "https://baconipsum.com/api/?type=meat-and-filler&paras=5&format=json"
+
+            retrieveData(firstUrl, (firstResponse) => {
+                retrieveData(secondUrl, (secondResponse) => {
+                    var fullText = firstResponse.toString() + secondResponse.toString();
+
+                    var element = document.getElementById("zad3");
+                    element.innerHTML = fullText;
+                });
+            });
+        </script>
+    </div>
+
+    <div>
+        <h2>Zad 4:</h2>
+        <div id="zad4">See:
+            <a href="zad4.js" class="zad4">zad4.js</a>
+        </div>
+        <br>
+        <br>
+    </div>
+
+    <div>
+        <h2>Zad 5:</h2>
+        <div id="zad5"></div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <script>
+            var square = document.createElement("div");
+
+            square.style.backgroundColor = "red";
+            square.style.width = "50px";
+            square.style.height = "50px";
+            square.style.position = "absolute";
+            square.style.transition = "2s";
+            square.style.left = "0";
+
+            document.getElementById("zad5").appendChild(square);
+
+            var isLeft = false;
+
+            window.setInterval(() => {
+                if (isLeft) {
+                    square.style.left = "0";
+                    square.style.width = "50px";
+                    square.style.height = "50px";
+                } else {
+                    square.style.left = "calc(100% - 100px)";
+                    square.style.width = "100px";
+                    square.style.height = "100px";
+                }
+
+                square.style.backgroundColor = getRandomColor();
+
+                isLeft = !isLeft;
+            }, 2000);
+
+            function getRandomColor() {
+                var hex = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; ++i) {
+                    color += hex[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+        </script>
+    </div>
+
+    <div>
+        <h2>Zad 6 - slider:</h2>
+        <div id="zad6"></div>
+        <br>
+        <br>
+        <script>
+            function readCarsFile() {}
+
+            readCarsFile();
+        </script>
+    </div>
+</body>
+
+</html>
