@@ -15,6 +15,104 @@
         .zad4 {
             color: yellow;
         }
+        
+        @font-face {
+            font-family: "Oranienbaum";
+            src: url("font/Oranienbaum.ttf");
+        }
+        
+        .custom-font {
+            font-family: "Oranienbaum", Arial, sans-serif;
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        .slider {
+            position: absolute;
+            height: 600px;
+            margin-bottom: 100px;
+            background-size: auto;
+            background-color: white;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-clip: content-box;
+            opacity: 0.7;
+        }
+        
+        .slider:hover {
+            opacity: 1;
+        }
+        
+        .leftButton {
+            position: absolute;
+            height: 600px;
+            opacity: 0.5;
+            color: black;
+        }
+        
+        .sliderContent {
+            position: absolute;
+            height: 600px;
+        }
+        
+        .rightButtom {
+            position: absolute;
+            height: 600px;
+            opacity: 0.5;
+            color: black;
+        }
+        
+        .leftButton:hover .rightButtom:hover {
+            opacity: 1;
+        }
+        
+        i {
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+        }
+        
+        .right {
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+            left: 50%;
+            top: 50%;
+            position: absolute;
+        }
+        
+        .left {
+            transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+            left: 50%;
+            top: 50%;
+            position: absolute;
+        }
+        
+        .fade {
+            -webkit-animation-name: fade;
+            -webkit-animation-duration: 1.5s;
+            animation-name: fade;
+            animation-duration: 1.5s;
+        }
+        
+        @-webkit-keyframes fade {
+            from {
+                opacity: .4
+            }
+            to {
+                opacity: 1
+            }
+        }
+        
+        @keyframes fade {
+            from {
+                opacity: .4
+            }
+            to {
+                opacity: 1
+            }
+        }
     </style>
 </head>
 
@@ -145,13 +243,78 @@
 
     <div>
         <h2>Zad 6 - slider:</h2>
-        <div id="zad6"></div>
-        <br>
-        <br>
+        <div id="zad6" class="custom-font slider fade">
+            <div id="leftButton" class="leftButton" onclick="displayNextCar(-1)">
+                <i class="left"></i>
+            </div>
+            <div id="sliderContent" class="sliderContent"></div>
+            <div id="rightButtom" class="rightButtom" onclick="displayNextCar(1)">
+                <i class="right"></i>
+            </div>
+        </div>
         <script>
-            function readCarsFile() {}
+            const URL_PREFIX = "https://raw.githubusercontent.com/Sejoslaw/DAN/master/";
 
+            var cars = [];
             readCarsFile();
+
+            function readCarsFile() {
+                var carsRequest = new XMLHttpRequest();
+
+                carsRequest.open("GET", URL_PREFIX + "cars.json", true);
+                carsRequest.onreadystatechange = function() {
+                    if (carsRequest.readyState === 4 && (carsRequest.status === 200 || carsRequest.status == 0)) {
+                        var response = carsRequest.responseText;
+                        var responseJson = JSON.parse(response);
+
+                        Object.keys(responseJson).forEach(element => {
+                            cars.push(responseJson[element]);
+                        });
+
+                        styleSlider();
+                    }
+                }
+                carsRequest.send();
+            }
+
+            var currentIndex = 0;
+            var slider = document.getElementById("zad6");
+
+            function styleSlider() {
+                slider.style.width = "calc(100% - 10px)";
+
+                var leftButton = document.getElementById("leftButton");
+                leftButton.style.width = window.innerWidth / 9;
+                leftButton.style.backgroundColor = "#EAEAEA";
+
+                var sliderContent = document.getElementById("sliderContent");
+                sliderContent.style.width = (window.innerWidth / 9) * 6;
+                sliderContent.style.left = leftButton.style.width;
+
+                var rightButton = document.getElementById("rightButtom");
+                rightButton.style.width = window.innerWidth / 9;
+
+                rightButton.style.right = "0px";
+                rightButton.style.backgroundColor = "#EAEAEA";
+
+                updateSlider();
+            }
+
+            function updateSlider() {
+                slider.style.backgroundImage = "url(" + URL_PREFIX + cars[currentIndex].path + ")";
+            }
+
+            function displayNextCar(slidePos) {
+                currentIndex += slidePos;
+
+                if (currentIndex < 0) {
+                    currentIndex = cars.length - 1;
+                } else if (currentIndex >= cars.length) {
+                    currentIndex = 0;
+                }
+
+                updateSlider();
+            }
         </script>
     </div>
 </body>
